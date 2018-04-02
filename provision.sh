@@ -1,70 +1,69 @@
 #!/usr/bin/env bash
 
-# Prevent grub updates to allow for initial automated update
-echo "[*] Temporarily holding back grub package updates..."
-sudo apt-mark hold grub2-common
-sudo apt-mark hold grub-pc
-sudo apt-mark hold grub-common
-
-# Upgrade the System Packages
 echo "[*] Updating system packages..."
-sudo apt-get update
-sudo apt-get upgrade -y
+sudo pacman -Syu --noconfirm
 
-# Set environment variables
 echo "[*] Setting bootstrap session environment variables..."
 export HDIR=/home/vagrant
 export SDIR=/vagrant
 
-# Install essentials
+## Provisioning Essentials ##
 echo "[*] Installing essential packages..."
-sudo apt-get install -y git
+sudo pacman -S --noconfirm base-devel curl git
 
-# Kickstart
-echo "[*] Kickstarting..."
-git clone --depth 1 https://github.com/glarsen/kickstart.git /tmp/kickstart && \
-cd /tmp/kickstart && \
-./kick.sh ubuntu-xenial build forensics python re x86-c
+## Languages ##
+echo "[*] Installing Python..."
+sudo pacman -S --noconfirm python2-pip python-pip
 
-# Dotfiles
+echo "[*] Installing Rust..."
+sudo pacman -S --noconfirm rustup rust-docs
+
+## Build Tools ##
+echo "[*] Installing compiler tools..."
+sudo pacman -S --noconfirm clang llvm musl nasm
+
+echo "[*] Installing meta-build tools..."
+sudo pacman -S --noconfirm cmake meson
+
+## Binary Tools ##
+echo "[*] Installing capstone..."
+sudo pacman -S --noconfirm capstone python2-capstone python-capstone
+
+echo "[*] Installing keystone..."
+sudo pacman -S --noconfirm keystone python2-keystone python-keystone
+
+echo "[*] Installing unicorn..."
+sudo pacman -S --noconfirm unicorn python2-unicorn python-unicorn
+
+echo "[*] Installing radare..."
+sudo pacman -S --noconfirm radare2
+
+echo "[*] Installing ropper..."
+sudo pacman -S --noconfirm ropper python2-ropper python-ropper
+
+## Debugging Tools ##
+echo "[*] Installing debuggers..."
+sudo pacman -S --noconfirm gdb lldb
+
+echo "[*] Installing debugger extensions (GEF)..."
+sudo -H pip3 install retdec-python && \
+curl -sSfL https://github.com/hugsy/gef/raw/master/scripts/gef.sh | sh
+
+echo "[*] Installing tracing utilities..."
+sudo pacman -S --noconfirm ltrace
+
+## Forensic Tools ##
+echo "[*] Installing forensic tools..."
+sudo pacman -S --noconfirm binwalk foremost wireshark-cli
+
+## Personalization ##
 echo "[*] Installing personalized dotfiles..."
 git clone --depth 1 https://github.com/glarsen/dotfiles /tmp/dotfiles && \
 cd /tmp/dotfiles && \
 ./install.sh vagrant
 
-# Customize
-echo "[*] Installing pwntools..."
-sudo -H pip3 install --upgrade git+https://github.com/arthaud/python3-pwntools.git
-
-echo "[*] Installing Keystone engine..."
-cd /tmp && \
-git clone --depth=1 https://github.com/keystone-engine/keystone.git && \
-mkdir keystone/build && \
-cd keystone/build && \
-../make-share.sh && \
-sudo make install && \
-sudo ldconfig
-
-echo "[*] Installing Unicorn engine..."
-cd /tmp && \
-git clone --depth=1 https://github.com/unicorn-engine/unicorn.git && \
-cd unicorn && \
-./make.sh && \
-sudo ./make.sh install
-
-echo "[*] Installing GEF dependencies..."
-sudo apt-get install -y python-capstone
-sudo -H pip3 install capstone unicorn keystone-engine ropper retdec-python
-
-echo "[*] Installing GEF..."
-curl https://github.com/hugsy/gef/raw/master/gef.sh -sSfL | sh
-
-echo "[*] Installing misc utilities..."
-sudo apt-get install -y xtrace
-
-# Remove the holds on Grub
-echo "[*] Removing hold on grub packages..."
-sudo apt-mark unhold grub-pc grub-common grub2-common
+echo "[*] Installing preferred editor (neovim)..."
+sudo pacman -S --noconfirm neovim
 
 # Provisioning complete
 echo "[*] Provisioning completed successfully!"

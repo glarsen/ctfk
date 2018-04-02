@@ -22,10 +22,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.cpus = "2"
   end
 
-  # CTF VM Host
-  config.vm.define :ctfdev do |node|
-    node.vm.box = "bento/ubuntu-16.04"
-    node.vm.hostname = "ctfdev"
+  config.vm.synced_folder ".", "/vagrant"
+
+  # Provisioning
+  config.vm.define :secdev do |node|
+    node.vm.box = "generic/arch"
+    node.vm.hostname = "secdev"
     node.vm.provision :shell, path: "provision.sh", privileged: false
   end
 end
