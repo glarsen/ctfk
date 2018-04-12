@@ -20,7 +20,7 @@ sudo pacman -S --noconfirm rustup rust-docs
 
 ## Build Tools ##
 echo "[*] Installing compiler tools..."
-sudo pacman -S --noconfirm clang llvm musl nasm
+sudo pacman -S --noconfirm clang llvm lld musl nasm
 
 echo "[*] Installing meta-build tools..."
 sudo pacman -S --noconfirm cmake meson
