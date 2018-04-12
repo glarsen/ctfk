@@ -41,6 +41,9 @@ sudo pacman -S --noconfirm radare2
 echo "[*] Installing ropper..."
 sudo pacman -S --noconfirm ropper python2-ropper python-ropper
 
+echo "[*] Installing QEMU..."
+sudo pacman -S --noconfirm qemu-headless qemu-headless-arch-extra
+
 ## Debugging Tools ##
 echo "[*] Installing debuggers..."
 sudo pacman -S --noconfirm gdb lldb

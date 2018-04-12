@@ -22,6 +22,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.cpus = "2"
   end
 
+  # Private Networking
+  config.vm.network "private_network", type: "dhcp"
+
+  # Set shared folders
   config.vm.synced_folder ".", "/vagrant"
 
   # Provisioning
