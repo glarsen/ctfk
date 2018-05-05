@@ -55,9 +55,17 @@ curl -sSfL https://github.com/hugsy/gef/raw/master/scripts/gef.sh | sh
 echo "[*] Installing tracing utilities..."
 sudo pacman -S --noconfirm ltrace
 
+## Fuzzing Tools ##
+echo "[*] Installing American Fuzzy Lop..."
+sudo pacman -S --noconfirm afl afl-utils
+
 ## Forensic Tools ##
 echo "[*] Installing forensic tools..."
-sudo pacman -S --noconfirm binwalk foremost wireshark-cli
+sudo pacman -S --noconfirm binwalk foremost volatility wireshark-cli
+
+## OS Tools ##
+echo "[*] Installing GNU ISO tools..."
+sudo pacman -S --noconfirm mtools xorriso
 
 ## Personalization ##
 echo "[*] Installing personalized dotfiles..."
